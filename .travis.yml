@@ -1,0 +1,36 @@
+language: cpp
+
+os: linux
+dist: bionic
+compiler: gcc
+sudo: true
+matrix:
+  include:
+    - env: BUILD=Debug COVERAGE=OFF
+    - env: BUILD=Release COVERAGE=OFF
+    - env: BUILD=Debug COVERAGE=ON
+
+before_script:
+  - sudo apt-get install -yq lcov
+
+script:
+  - git submodule update --init --recursive
+  - cd UnitTest-cpp
+  - mkdir -p lib/${BUILD}
+  - cd lib/${BUILD}
+  - cmake ../.. -DCMAKE_BUILD_TYPE=${BUILD}
+  - make
+  - cd ../../..
+  - mkdir -p build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=${BUILD} -DUnfit_ENABLE_TESTING=ON -DUnfit_COVERAGE=${COVERAGE}
+  - make
+  - if [ $COVERAGE == "ON" ];
+    then make coverage;
+    else ./UnfitTest;
+    fi
+
+after_success:
+  - if [ $COVERAGE == "ON" ]; then
+    bash <(curl -s https://codecov.io/bash) -f coverage.info.cleaned -t "30ccfca2-015e-4c4e-913f-3cae31ea6673" || echo "Codecov did not collect coverage reports";
+    fi

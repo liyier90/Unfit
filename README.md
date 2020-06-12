@@ -1,4 +1,7 @@
-# Unfit
+Unfit<br>
+[![Build Status](https://travis-ci.org/liyier90/Unfit.svg?branch=master)](https://travis-ci.org/liyier90/Unfit)
+[![codecov](https://codecov.io/gh/liyier90/Unfit/branch/master/graph/badge.svg)](https://codecov.io/gh/liyier90/Unfit)
+==========
 Data fitting and optimization software
 
 ### Getting Started (User Version)
